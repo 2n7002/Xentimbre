@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Xentimbre</title>
+  <meta name="description" content="A webapp for creating custom timbres">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html { line-height: 1.15 }
+
+    body { margin: 0 }
+  
+    abbr[title] { 
+      border-bottom: none; 
+      text-decoration: underline; 
+      text-decoration: underline dotted; 
+    }
+
+    b { font-weight: bolder } 
+
+    code, kbd, samp {
+      font-family: monospace, monospace; 
+      font-size: 1em; 
+    }
+  
+    img { border-style: none } 
+
+    button, input, optgroup, select, textarea {
+      font-family: inherit; 
+      font-size: 100%; 
+      line-height: 1.15; 
+      margin: 0; 
+    }  
+
+    button, input { overflow: visible } 
+    button, select { text-transform: none } 
+    button, [type="button"], [type="reset"], [type="submit"] { -webkit-appearance: button } 
+    button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
+      border-style: none;
+      padding: 0;
+    }
+
+    fieldset { padding: 0.35em 0.75em 0.625em }
+    
+    legend {
+      box-sizing: border-box; 
+      color: inherit; 
+      display: table; 
+      max-width: 100%; 
+      padding: 0; 
+      white-space: normal; 
+    }
+
+    textarea { overflow: auto }
+  
+    [type="checkbox"], [type="radio"] {
+      box-sizing: border-box; 
+      padding: 0; 
+    }
+
+    [type="number"]::-webkit-inner-spin-button, [type="number"]::-webkit-outer-spin-button {height: auto}
+
+    [type="search"] {-webkit-appearance: textfield}
+  
+    [type="search"]::-webkit-search-decoration {-webkit-appearance: none}
+
+    ::-webkit-file-upload-button {
+      -webkit-appearance: button; 
+      font: inherit; 
+    }
+
+    details { display: block }
+  
+    summary { display: list-item }
+
+    template { display: none }
+
+    [hidden] { display: none }
+
+    @font-face {
+      font-family: Ubuntu;
+      src: url('Ubuntu-Regular.ttf');
+    }
+
+    * {
+      background-color: transparent;
+      padding: 0;
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+
+    html {
+      background-image: linear-gradient(to bottom right, #38CBBF, #891269);
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+  
+    html, button, input, input::placeholder, textarea, textarea::placeholder {
+      font-family: Ubuntu, sans-serif;
+      color: #FFF;
+    }
+  
+    button, input { border: 0.1vw inset #FFF }
+
+    a:link, a:visited, a:active {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover, button:hover {
+      color: #AAA;
+      transition: 0.25s;
+    }
+
+    * { font-size: 0.8vw }
+    html { overflow: hidden }
+    div { display: flex }
+    h2 { font-size: 0.9vw }
+
+    body { 
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .appcont {
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 85vw;
+      height: 95vh;
+    }
+
+    .panel {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #DDD;
+      width: 100%;
+    }
+
+    .top { height: 8%; justify-content: space-between }
+    .draws { height: 22%; justify-content: space-around }
+    .hcont { height: 29% }
+    .kcont { height: 29% }
+  
+    .iconcont { 
+      width: 20%; 
+      margin: 0 auto 0 1vw;
+    }
+  
+    .icon {
+      width: 5vh;
+      height: 5vh;
+      background-image: url("");
+      background-size: cover;
+      border: 1px solid #DDD;
+    }
+  
+    .title {
+      justify-content: center;
+      width: 50%;
+      height: 80%;
+      margin: auto;
+    }
+
+    .title h2 { 
+      color: #55E8A6;
+      font-size: 1.5vw !important;
+      margin: auto; 
+    }
+  
+    .misc {
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      width: 20%; 
+      margin: 0 1vw 0 auto;
+    }
+  
+    .misc > * { padding: 0 0 0 0.5vw }
+
+    .misc div {
+      font-size: 70%;
+      height: 60%;  
+    }
+
+    .misc img {
+      width: 3vh;
+      height: 3vh;
+    }
+
+    .draws > div {
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      width: 40%;
+      height: 90%;
+    }
+
+    .draws h2 { margin: 0 0 0.5vh 0 }
+    
+    .draws div canvas {
+      width: 100%;
+      height: 80%;
+      border: 1px solid #DDD;
+    }
+
+    .hcont {
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  
+    .hcont > div {
+      height: 80%;
+      border: 1px solid #DDD;
+    }
+    .hcont div > * { margin: 0.5vh 0 0.5vh 0 }
+  
+    .ed-freq {
+      flex-direction: column;
+      justify-content: center;    
+      align-items: center;
+      width: 20%;
+    }
+  
+    .ed-freq input[type="text"] {
+      background-color: transparent;
+      width: 2vw;
+    }
+  
+    #vol { width: 7vw }
+  
+    .harmonics {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      width: 40%;
+    }
+  
+    .ha {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 12.8%;
+      height: 100%;
+      margin: 0 auto;
+      border: 1px solid #DDD;
+    }
+  
+    .ha input {
+      background-color: #888;
+      width: 2.5vw;
+      height: 1.5vh;
+    }
+  
+    .env {
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 20%;
+    }
+  
+    #adsr-graph {
+      width: 100%;
+      height: 50%;
+      margin: 0 0 auto 0;
+      border-bottom: 1px solid white;
+    }
+  
+    .econt {
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      width: 90%;
+      height: 40%;
+      margin: 0 !important;
+      padding-bottom: 0.5vh;
+    }
+  
+    .erow {
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      height: 25%;
+      margin: 0 !important;
+    }
+  
+    .erow input { 
+      width: 40%; 
+      margin: 0 auto 0 0.5vw;
+    }
+  
+    .erow p { 
+      width: 40%;
+      margin: 0 0.5vw 0 auto;
+    }
+  
+    .keyboard {
+      margin: auto;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 80%;
+      height: 90%;
+    }
+  
+    .keyboard > div {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .keys div {
+      display: flex
+      flex-direction: row;  
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.5s ease;
+      width: 5vh;
+      height: 5vh;
+      border: 1px solid black;
+      border-radius: 0.5vh;
+      margin: auto 1.5vh;
+    }
+  
+    .keys div * { margin: auto }  
+  
+    .spc {
+      border: none !important;
+      width: 2vh !important;
+      margin: 0 !important;
+    }
+</style>
+</head>
+
+<body>
+  <div class="appcont">
+    <div class="panel top">
+      <div class="iconcont">
+        <a href="">
+          <div class="icon"></div>
+        </a>
+      </div>
+      <div class="title">
+        <h2>Xentimbre</h2>
+      </div>
+      <div class="misc">
+        <a href="">
+          <div class="report">
+            <p>Report issue</p>
+          </div>
+        </a>
+        <a href="https://github.com/2n7002/Xentimbre">
+          <img src=""> <!--../Github.png-->
+        </a>
+      </div>
+    </div>
+    <div class="panel draws">
+      <div class="disscont">
+        <h2>Dissonance Curve</h2>
+        <canvas id="diss"></canvas>
+      </div>
+      <div class="wavecont">
+        <h2>Sound Wave</h2>
+        <canvas id="wave"></canvas>
+      </div>
+    </div>
+    <div class="panel hcont">
+      <div class="ed-freq">
+        <h2>Tuning</h2>
+        <p><input type="text" value="12" id="divs">ed<input type="text" value="2" id="interval"></p>
+        <h2>Reference</h2>
+        <p><input type="text" value="262" id="ref"> hz</p>
+        <h2>Page Volume</h2>
+        <p id="voltext">30%</p><input type="range" id="vol" min="0" max="100" value="30">
+      </div>
+      <div class="harmonics">
+        <div class="ha 1"></div><div class="ha 2"></div><div class="ha 3"></div><div class="ha 4"></div><div class="ha 5"></div><div class="ha 6"></div><div class="ha 7"></div><div class="ha 8"></div><div class="ha 9"></div><div class="ha 10"></div><div class="ha 11"></div><div class="ha 12"></div><div class="ha 13"></div><div class="ha 14"></div><div class="ha 15"></div><div class="ha 16"></div><div class="ha 17"></div><div class="ha 18"></div><div class="ha 19"></div><div class="ha 20"></div><div class="ha 21"></div><div class="ha 22"></div><div class="ha 23"></div><div class="ha 24"></div><div class="ha 25"></div><div class="ha 26"></div><div class="ha 27"></div><div class="ha 28"></div><div class="ha 29"></div><div class="ha 30"></div><div class="ha 31"></div><div class="ha 32"></div><div class="ha 33"></div><div class="ha 34"></div><div class="ha 35"></div><div class="ha 36"></div><div class="ha 37"></div><div class="ha 38"></div><div class="ha 39"></div><div class="ha 40"></div><div class="ha 41"></div><div class="ha 42"></div><div class="ha 43"></div><div class="ha 44"></div><div class="ha 45"></div><div class="ha 46"></div><div class="ha 47"></div><div class="ha 48"></div><div class="ha 49"></div><div class="ha 50"></div>
+      </div>
+      <div class="env">
+        <canvas id="adsr-graph"></canvas>
+        <div class="econt">
+          <div class="erow">
+            <p id="atttext">Attack: 0.2s</p><input type="range" id="att" min="0" max="50" value="5">
+          </div>
+          <div class="erow">
+            <p id="dectext">Decay: 0.2s</p><input type="range" id="dec" min="0" max="50" value="5">
+          </div>
+          <div class="erow">
+            <p id="sustext">Sustain: 0.8</p><input type="range" id="sus" min="0" max="50" value="40">
+          </div>
+          <div class="erow">
+            <p id="reltext">Release: 1s</p><input type="range" id="rel" min="0" max="50" value="25">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel kcont">
+      <div class="keyboard">
+        <div class="keys r1">
+          <div class="k1"><p>1</p></div><div class="k2"><p>2</p></div><div class="k3"><p>3</p></div><div class="k4"><p>4</p></div><div class="k5"><p>5</p></div><div class="k6"><p>6</p></div><div class="k7"><p>7</p></div><div class="k8"><p>8</p></div><div class="k9"><p>9</p></div><div class="spc"></div><div class="spc"></div><div class="spc"></div>
+        </div>
+        <div class="keys r2">
+          <div class="spc"></div><div class="q"><p>Q</p></div><div class="w"><p>W</p></div><div class="e"><p>E</p></div><div class="r"><p>R</p></div><div class="t"><p>T</p></div><div class="y"><p>Y</p></div><div class="u"><p>U</p></div><div class="i"><p>I</p></div><div class="o"><p>O</p></div><div class="spc"></div><div class="spc"></div>
+        </div>
+        <div class="keys r3">
+          <div class="spc"></div><div class="spc"></div><div class="a"><p>A</p></div><div class="s"><p>S</p></div><div class="d"><p>D</p></div><div class="f"><p>F</p></div><div class="g"><p>G</p></div><div class="h"><p>H</p></div><div class="j"><p>J</p></div><div class="k"><p>K</p></div><div class="l"><p>L</p></div><div class="spc"></div>
+        </div>
+        <div class="keys r4">
+          <div class="spc"></div><div class="spc"></div><div class="spc"></div><div class="z"><p>Z</p></div><div class="x"><p>X</p></div><div class="c"><p>C</p></div><div class="v"><p>V</p></div><div class="b"><p>B</p></div><div class="n"><p>N</p></div><div class="m"><p>M</p></div><div class=","><p>,</p></div><div class="."><p>.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  const playKeys = "zxcvbnm,.asdfghjklqwertyuio123456789";
+  let ref = 262, divs = 12, interval = 2, volume = 30;
+  let att = 0.2, dec = 0.2, sus = 0.8, rel = 1;
+  let harmonics = new Array(50).fill(null).map(() => new Array(2));
+  harmonics[0] = [1, 1];
+  let playing = new Array(50);
+  let a;
+  
+  function invalid(val) { return val == 0 || val == undefined || val == null || isNaN(val) }
+  
+  window.addEventListener("resize", () => {
+    redrawDissWave();
+    redrawAdsr();
+  });
+  
+  function disscalc(r) { return (Math.pow(23, 23 / 9) / (9 * Math.pow(14, 14 / 9))) * (Math.exp((-1680 / 137) * (r - 1)) - Math.exp((-2760 / 137) * (r - 1))); }
+  
+  function redrawDissWave() {
+    const diss = document.getElementById("diss");
+    let c = diss.getContext("2d");
+    let y;
+  
+    c.beginPath();
+    c.clearRect(0, 0, diss.width, diss.height);
+    c.moveTo(0, diss.height);
+    c.lineWidth = 2;
+    c.strokeStyle = "#02F8D4";
+  
+    let active = [], index = 0;
+    harmonics.forEach(h => {
+      if (!invalid(h[0]) && !invalid(h[1])) {
+        active[index] = [h[0], h[1]];
+        index++;
+      }
+    });
+  
+    let dissCenter = 0;
+    active.forEach(h1 => {
+      active.forEach(h2 => {
+        dissCenter += Math.min(h1[1], h2[1]);
+      });
+    });
+    
+    intAdj = 0, activeAdj = [];
+    for (let i = 0; i <= diss.width; i++) {
+      y = 0;
+      intAdj = ((i / diss.width) * (interval - 1)) + 1;
+      activeAdj = active.map(h => [h[0] * intAdj, h[1]]);
+      
+      active.forEach(h => {
+        activeAdj.forEach(hadj => {
+          y += Math.min(h[1], hadj[1]) * disscalc(Math.max(h[0], hadj[0]) / Math.min(h[0], hadj[0]));
+        });
+      });  
+      y /= dissCenter;
+      y = diss.height * (1 - y);
+      c.lineTo(i, y);
+    }
+    
+    c.stroke()
+  
+    const wave = document.getElementById("wave");
+    c = wave.getContext("2d");  
+    
+    let amplCenter = 0;
+    harmonics.forEach(h => { if (!invalid(h[0]) && !invalid(h[1])) amplCenter += h[1]; });
+  
+    c.beginPath();
+    c.clearRect(0, 0, wave.width, wave.height);
+    c.moveTo(0, wave.height / 2);
+    c.lineWidth = 2;
+    c.strokeStyle = "#02F8D4";
+    for (let i = 0; i < wave.width; i++) {
+      y = 0;
+      harmonics.forEach(h => { 
+        if (!invalid(h[0]) && !invalid(h[1])) { 
+          y += h[1] * Math.sin(2 * Math.PI * h[0] * i / wave.width);
+        }
+      });
+      y /= amplCenter; 
+      y = wave.height * (1 - ((y + 1) / 2));
+      c.lineTo(i, y);
+    }
+    c.stroke();
+  }
+  
+  document.getElementById("divs").addEventListener("input", d => {
+    try {  
+      divs = parseInt(d.target.value.trim())   
+    } catch {}
+  
+    redrawDissWave();
+  });
+  
+  document.getElementById("interval").addEventListener("input", i => {
+    let val = i.target.value;
+    if (val.includes("/")) {
+      try {
+        let nums = val.trim().split("/");
+        if (invalid(nums[0]) || invalid(nums[1])) throw "";
+        interval = (nums[0] / nums[1]);           
+      } catch {}
+    } else {
+      try {
+        let int = parseFloat(val.trim());
+        if (int != 0) interval = int;
+      } catch {}
+    }
+  
+    redrawDissWave();
+  });
+  
+  document.getElementById("ref").addEventListener("input", r => {
+    try {
+      ref = parseFloat(r.target.value.trim());
+    } catch {}
+  }); 
+  
+  document.getElementById("vol").addEventListener("input", i => {
+    volume = i.target.value;
+    document.getElementById("voltext").innerText = volume + "%";
+  });
+  
+  window.addEventListener("DOMContentLoaded", () => {
+    redrawAdsr();
+    redrawDissWave();
+    document.querySelectorAll(`[class*="ha "]`).forEach((h, index) => {
+      if (index < 1) h.innerHTML = `<h2>${index + 1}</h2>\n<br>\n<p>Ratio:</p>\n<p style="height: 1.74vh">1</p>\n<p>Amplitude:</p>\n<input type="text" id="h-ampl-${index + 1}" value="1">`;
+      else h.innerHTML = `<h2>${index + 1}</h2>\n<br>\n<p>Ratio:</p>\n<input type="text" id="h-ratio-${index + 1}">\n<p>Amplitude:</p>\n<input type="text" id="h-ampl-${index + 1}">`;
+    });
+
+    for (let i = 1; i <= 50; i++) {
+      if (i != 1) document.getElementById(`h-ratio-${i}`).addEventListener("input", h => {
+        let val = h.target.value;
+        if (val.includes("/")) {
+          try {
+            let nums = val.trim().split("/");
+            if (invalid(nums[0]) || invalid(nums[1])) throw "";
+            harmonics[i - 1][0] = (nums[0] / nums[1]);      
+          } catch {}
+        } else if (invalid(val)) {
+          harmonics[i - 1][0] = undefined;
+        } else try { harmonics[i - 1][0] = parseFloat(val.trim()); } catch {}
+  
+        if (harmonics[i - 1][0] < 1) harmonics[i - 1][0] = undefined;
+        redrawDissWave();
+      });
+  
+      document.getElementById(`h-ampl-${i}`).addEventListener("input", h => {
+        let val = h.target.value;
+        if (val.includes("/")) {
+          try {  
+            let nums = val.trim().split("/");
+            if (invalid(nums[0]) || invalid(nums[1])) throw "";
+            harmonics[i - 1][1] = (nums[0] / nums[1]);           
+          } catch {}
+        } else if (invalid(val)) {
+          harmonics[i - 1][1] = undefined;
+        } else {
+          try {
+            harmonics[i - 1][1] = parseFloat(val.trim());
+          } catch {}
+        }
+  
+        if (harmonics[i - 1][1] > 1) harmonics[i - 1][1] = undefined;
+        redrawDissWave();   
+      });
+    }
+  });
+  
+  document.getElementById("att").addEventListener("input", i => {
+    att = i.target.value / 25;
+    document.getElementById("atttext").innerText = "Attack: " + att + "s";
+    redrawAdsr();
+  });
+  
+  document.getElementById("dec").addEventListener("input", i => {
+    dec = i.target.value / 25;
+    document.getElementById("dectext").innerText = "Decay: " + dec + "s";
+    redrawAdsr();
+  });
+  
+  document.getElementById("sus").addEventListener("input", i => {
+    sus = i.target.value / 50;
+    document.getElementById("sustext").innerText = "Sustain: " + sus;
+    redrawAdsr();
+  });
+  
+  document.getElementById("rel").addEventListener("input", i => {
+    rel = i.target.value / 25;
+    document.getElementById("reltext").innerText = "Release: " + rel + "s";
+    redrawAdsr();
+  });
+  
+  function redrawAdsr() {
+    const adsr = document.getElementById("adsr-graph");
+    const c = adsr.getContext("2d");
+    const timesum = att + dec + 1 + rel; // sustain will always be 1s on graph
+  
+    c.lineWidth = 4;
+    c.strokeStyle = "#5DF714"
+    c.beginPath();
+    c.clearRect(0, 0, adsr.width, adsr.height);
+    c.moveTo(0, adsr.height);
+    c.lineTo(adsr.width * att / timesum, 0.01 * adsr.height);
+    c.lineTo(adsr.width * (att + dec) / timesum, adsr.height * (1 - sus));
+    c.lineTo(adsr.width * (att + dec + 1) / timesum, adsr.height * (1 - sus));
+    c.lineTo(adsr.width, adsr.height);
+    c.stroke();
+  }
+  
+  window.addEventListener("keydown", e => {
+    if (!a) a = new window.AudioContext(); // can't be defined until after page load
+    if (document.activeElement.tagName == "INPUT") return;
+    if (playKeys.indexOf(e.key) !== -1) {
+      startPlay(e.key);
+      const keydiv = isNaN(e.key) ? document.getElementsByClassName(e.key)[0] : document.getElementsByClassName("k" + e.key)[0];
+      keydiv.style.transition = "none";
+      keydiv.style.backgroundColor = "#AEC5D6";
+    } else if (e.key == "=") {
+      if (volume < 90) volume += 10; else volume = 100;
+      document.getElementById("voltext").innerText = volume + "%";
+      document.getElementById("vol").value = volume;
+    } else if (e.key == "-") {
+      if (volume > 10) volume -= 10; else volume = 0;
+      document.getElementById("voltext").innerText = volume + "%";
+      document.getElementById("vol").value = volume;
+    } else if (e.key == " ") { 
+      a.close().then(() => a = new window.AudioContext());
+    }
+  });
+  
+  window.addEventListener("keyup", e => {
+    if (playKeys.includes(e.key)) {
+      stopPlay(e.key);
+      const keydiv = isNaN(e.key) ? document.getElementsByClassName(e.key)[0] : document.getElementsByClassName("k" + e.key)[0];
+      keydiv.style.transition = "background-color " + rel + "s ease";
+      keydiv.style.backgroundColor = "transparent";
+    }
+  });
+  
+  function startPlay(key) {
+    if (!playing[key]) { 
+      playing[key] = { oscs: [], gs: [] };
+      harmonics.forEach(h => { 
+        if (!invalid(h[0]) && !invalid(h[1])) {
+          const freq = ref * Math.pow(Math.pow(interval, 1 / divs), playKeys.indexOf(key) - 9);
+          const osc = a.createOscillator(), g = a.createGain();
+          osc.connect(g);
+          g.connect(a.destination);
+          osc.type = "sine";
+          const c = a.currentTime;
+          osc.frequency.setValueAtTime(h[0] * freq, c);
+          g.gain.setValueAtTime(0, c);
+          g.gain.linearRampToValueAtTime(h[1] * volume / 100, c + att);
+          g.gain.linearRampToValueAtTime(h[1] * sus * volume / 100, c + att + dec);
+          osc.start(c);
+          playing[key].oscs.push(osc);
+          playing[key].gs.push(g);    
+        }
+      });
+    }
+  }
+  
+  function stopPlay(key) {
+    if (playing[key]) {
+      let c = a.currentTime;
+      playing[key].gs.forEach(g => g.gain.linearRampToValueAtTime(0, c + rel)); 
+      playing[key].oscs.forEach(osc => osc.stop(c + rel));
+      playing[key] = null;
+    }
+  }
+</script>
+
+</html>
