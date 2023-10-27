@@ -18,9 +18,9 @@ While the page is selected, the player will listen for keyboard inputs unless a 
 #### File exports
 When "Export sample" is clicked, if a valid sample duration is specified, a download will be generated for a .wav containing the timbre. The timbre will play at the reference frequency set in the player. The exported sound is normalized to the average of the amplitudes of each harmonic, but the file is then additionally adjusted to ~75% volume regardless of what the player volume is.
 
-#### How the graphs are calculated
+#### How the dissonance curve is calculated
 
-The function I used for the dissonance curve is a modification of Sethares' parameterization, which instead only takes one frequency *ratio* and uses a fixed reference frequency of 400 Hz. Additionally, Sethares' parameterization returned a value from 0 to ~0.1808, so I scaled it to 0 to 1. Note that his formula, as well as mine, will not work for fractions less than 1. This is part of the reason why the user-defined intervals in each harmonic have to be greater than or equal to 1.
+The function I used for the dissonance curve is a modification of Sethares' parameterization, which instead only takes one frequency *ratio* and uses a fixed reference frequency of 400 Hz. Additionally, Sethares' parameterization returned a value from 0 to ~0.1808, so I scaled it to 0 to 1. Note that his formula, as well as mine, will not work for fractions less than 1. This is part of the reason why the user-defined intervals in each harmonic have to be greater than or equal to 1. Also, phase offsets do not change the calculated dissonance, as I do not know how to account for this or if it even makes a difference.
 ```js
 function disscalc(r) {
   // This is the inverse of the exact maximum value Sethares' original parameterization returns, ~0.1808
@@ -28,9 +28,4 @@ function disscalc(r) {
   // followed by the dissonance calculation itself, where r is the frequency ratio
     * (Math.exp((-1680 / 137) * (r - 1)) - Math.exp((-2760 / 137) * (r - 1)));
 }
-```
-
-As for the sound wave, the function has been updated to draw a graph over 2 periods of the fundamental frequency. The calculation below is done for each harmonic. (Variable names changed for clarity)
-```js
-y += harmonicAmplitude * Math.sin(4 * Math.PI * harmonicRatio * x / canvas.width);
 ```
